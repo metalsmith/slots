@@ -8,7 +8,6 @@ import Metalsmith from 'metalsmith'
 import layouts from '@metalsmith/layouts'
 import inPlace from '@metalsmith/in-place'
 import plugin from '../src/index.js'
-import { inspect } from 'node:util'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const { name } = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
@@ -44,11 +43,7 @@ describe('@metalsmith/slots', function () {
   let ms, singleBuild
   before(async () => {
     ms = Metalsmith(fixture('default')).env('DEBUG', process.env.DEBUG)
-    singleBuild = new Map(Object.entries(await ms
-      .use(patchDebug())
-      .use(plugin())
-      .process()
-    ))
+    singleBuild = new Map(Object.entries(await ms.use(patchDebug()).use(plugin()).process()))
     return singleBuild
   })
 
@@ -73,11 +68,11 @@ describe('@metalsmith/slots', function () {
   })
 
   it('only adds a "slots" property to the files that are matched by pattern', function () {
-    assert.strictEqual(singleBuild.get('default.html').hasOwnProperty('slots'), false)
-    assert.strictEqual(singleBuild.get('default.md').hasOwnProperty('slots'), true)
+    assert.strictEqual(Object.prototype.hasOwnProperty.call(singleBuild.get('default.html'), 'slots'), false)
+    assert.strictEqual(Object.prototype.hasOwnProperty.call(singleBuild.get('default.md'), 'slots'), true)
   })
 
-  it('parses multiple slots as expected', function() {
+  it('parses multiple slots as expected', function () {
     assert.deepStrictEqual(singleBuild.get('multiple-slots.md').slots, {
       footer: {
         name: 'footer',
@@ -95,8 +90,7 @@ describe('@metalsmith/slots', function () {
     assert.strictEqual(singleBuild.get('multiple-slots.md').contents.toString(), 'Contents')
   })
 
-  it('assigns parsed slots to an existing file.slots object', function() {
-    //console.log(inspect(singleBuild.get('already_has_slots_data.md'), null, 5, true))
+  it('assigns parsed slots to an existing file.slots object', function () {
     assert.deepStrictEqual(singleBuild.get('already_has_slots_data.md').slots, {
       footer: {
         name: 'footer',
@@ -109,22 +103,32 @@ describe('@metalsmith/slots', function () {
     })
   })
 
-  it('overwrites a non-object slots property and logs a warning', function() {
+  it('overwrites a non-object slots property and logs a warning', function () {
     assert.deepStrictEqual(singleBuild.get('already_has_non_object_slots_prop.md').slots, {
       footer: {
         name: 'footer',
         contents: '<footer></footer>'
       }
     })
-    assert(ms.metadata().logs.find(([channel, msg, type, path]) => channel === 'warn' && msg === 'Overwriting incompatible slots property of type "%s" in file "%s"' && type === 'array' && path.endsWith('already_has_non_object_slots_prop.md')))
+    assert(
+      ms
+        .metadata()
+        .logs.find(
+          ([channel, msg, type, path]) =>
+            channel === 'warn' &&
+            msg === 'Overwriting incompatible slots property of type "%s" in file "%s"' &&
+            type === 'array' &&
+            path.endsWith('already_has_non_object_slots_prop.md')
+        )
+    )
   })
 
-  it('works with frontmatter turned off', function(done) {
+  it('works with frontmatter turned off', function (done) {
     Metalsmith(fixture('frontmatter-off'))
       .frontmatter(false)
       .env('DEBUG', process.env.DEBUG)
       .use(plugin())
-      .build((err, files) => {
+      .build((err) => {
         if (err) done(err)
         else {
           try {
@@ -138,12 +142,12 @@ describe('@metalsmith/slots', function () {
       })
   })
 
-  it('render as slot.contents when toStringed (eg in templates)', function(done) {
+  it('render as slot.contents when toStringed (eg in templates)', function (done) {
     Metalsmith(fixture('slot_tostring'))
       .env('DEBUG', process.env.DEBUG)
-      .use(plugin({ pattern: '**/*.njk'}))
+      .use(plugin({ pattern: '**/*.njk' }))
       .use(inPlace({ transform: 'nunjucks' }))
-      .build((err, files) => {
+      .build((err) => {
         if (err) done(err)
         else {
           try {
@@ -156,12 +160,12 @@ describe('@metalsmith/slots', function () {
       })
   })
 
-  it('can be rendered in file.contents with @metalsmith/in-place', function(done) {
+  it('can be rendered in file.contents with @metalsmith/in-place', function (done) {
     Metalsmith(fixture('in-place'))
       .env('DEBUG', process.env.DEBUG)
-      .use(plugin({ pattern: '**/*.njk'}))
+      .use(plugin({ pattern: '**/*.njk' }))
       .use(inPlace({ transform: 'nunjucks' }))
-      .build((err, files) => {
+      .build((err) => {
         if (err) done(err)
         else {
           try {
@@ -174,12 +178,12 @@ describe('@metalsmith/slots', function () {
       })
   })
 
-  it('can be rendered in layouts with @metalsmith/layouts', function(done) {
+  it('can be rendered in layouts with @metalsmith/layouts', function (done) {
     Metalsmith(fixture('layouts'))
       .env('DEBUG', process.env.DEBUG)
       .use(plugin({ pattern: '**/*.html' }))
       .use(layouts({ pattern: '**/*.html' }))
-      .build((err, files) => {
+      .build((err) => {
         if (err) done(err)
         else {
           try {
