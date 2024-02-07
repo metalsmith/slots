@@ -17,8 +17,8 @@
   },
   "github": {
     "release": true,
-    "releaseName": "@metalsmith/~core-plugin~ ${version}",
+    "releaseName": "@metalsmith/slots ${version}",
     "tokenRef": "GITHUB_TOKEN",
-    "assets": ["metalsmith-~core-plugin~-${version}.tgz"]
+    "assets": ["metalsmith-slots-${version}.tgz"]
   }
 }

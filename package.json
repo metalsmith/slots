@@ -1,10 +1,10 @@
 {
-  "name": "@metalsmith/~core-plugin~",
-  "private": true,
+  "name": "@metalsmith/slots",
   "version": "0.1.0",
-  "description": "A Metalsmith plugin to ...",
+  "description": "A Metalsmith plugin to divide file contents in slots, associate metadata with them and process them separately",
   "keywords": [
-    "~core-plugin~",
+    "slots",
+    "content",
     "metalsmith-plugin",
     "metalsmith",
     "static-site"
@@ -20,7 +20,7 @@
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/metalsmith/~core-plugin~.git"
+    "url": "git+https://github.com/metalsmith/slots.git"
   },
   "files": [
     "lib",
@@ -33,13 +33,15 @@
   "author": "Kevin Van Lierde (https://webketje.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/metalsmith/~core-plugin~/issues"
+    "url": "https://github.com/metalsmith/slots/issues"
   },
-  "homepage": "https://github.com/metalsmith/~core-plugin~#readme",
+  "homepage": "https://github.com/metalsmith/slots#readme",
   "dependencies": {
     "debug": "^4.3.4"
   },
   "devDependencies": {
+    "@metalsmith/in-place": "^5.0.0",
+    "@metalsmith/layouts": "^2.7.0",
     "assert-dir-equal": "^1.1.0",
     "auto-changelog": "^2.4.0",
     "c8": "^8.0.1",
@@ -47,6 +49,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
+    "jstransformer-nunjucks": "^1.2.0",
     "metalsmith": "^2.6.2",
     "microbundle": "^0.15.1",
     "mocha": "^10.2.0",
@@ -69,7 +72,7 @@
     "test": "c8 mocha"
   },
   "engines": {
-    "node": ">=12.17.0 <13.0.0-0||>=13.2.0"
+    "node": ">=14.14.0"
   },
   "publishConfig": {
     "access": "public"

@@ -1,10 +1,10 @@
 import { Plugin } from 'metalsmith';
 
-export default corePlugin;
+export default slots;
 export type Options = {
     key: string;
 };
 /**
- * A Metalsmith plugin to serve as a boilerplate for other core plugins
+ * A Metalsmith plugin to divide file contents in slots, associate metadata with them and process them separately
  */
-declare function corePlugin(options: Options): Plugin;
+declare function slots(options: Options): Plugin;

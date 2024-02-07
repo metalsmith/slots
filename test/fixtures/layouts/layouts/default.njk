@@ -1,0 +1,19 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+</head>
+<body>
+  <header>
+    {% if debug %}<span class="debug">{{ slots.header.name }}</span>{% endif %}
+    {{ slots.header.contents | safe }}
+  </header>
+  <h1>{{ title }}</h1>
+  {{ contents | safe }}
+  <footer>
+    {% if debug %}<span class="debug">{{ slots.footer.name }}</span>{% endif %}
+    {{ slots.footer.contents | safe }}
+  </footer>
+</body>
+</html>
